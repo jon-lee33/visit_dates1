@@ -1,0 +1,97 @@
+---
+title: "Untitled"
+author: "Jon"
+date: "2/25/2020"
+output: 
+    html_document:
+    toc: true
+    toc_depth: 6
+    number_sections: true
+    toc_float: true
+    highlight: tango
+    theme: minty
+    
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE)
+setwd("/Users/jonkawatachi/Documents/alldata")
+
+# Import Packages
+
+packages <- c("ggplot2", "openxlsx", "tidyverse", "dplyr", "magrittr", "lubridate", "readxl", "foreign", "data.table", "haven", "knitr")
+# Install packages not yet installed
+installed_packages <- packages %in% rownames(installed.packages())
+if (any(installed_packages == FALSE)) {
+  install.packages(packages[!installed_packages])
+}
+# Packages loading
+lapply(packages, library, character.only = TRUE)
+```
+
+***
+
+# This highlights a section and makes it blue:
+
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+- This is my first conclusion
+- This is my second conclusion
+</div>
+
+## Import Demographics
+
+```{r}
+amdemo <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/am_iccplus/baseline_demographics.csv")
+azdemo <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/az_iccplus/baseline_demographics.csv")
+bidemo <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/bi_iccplus/baseline_demographics.csv")
+crdemo <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/cr_iccplus/baseline_demographics.csv") 
+dhdemo <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/dh_iccplus/baseline_demographics.csv")
+lddemo <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/ld_iccplus/baseline_demographics.csv")
+kademo <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/ka_iccplus/baseline_demographics.csv")
+dmdemo <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/dm_iccplus/baseline_demographics.csv")
+bedemo <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/be_iccplus/baseline_demographics.csv")
+vzdemo <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/vz_iccplus/baseline_demographics.csv")
+bgdemo <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/bg_iccplus/baseline_demographics.csv")
+hydemo <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/hy_iccplus/baseline_demographics.csv") 
+bpdemo <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/bp_iccplus/baseline_demographics.csv")
+vjdemo <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/vj_iccplus/baseline_demographics.csv")
+mddemo <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/md_iccplus/baseline_demographics.csv")
+dldemo <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/dl_iccplus/baseline_demographics.csv")
+alldemo<- rbind(bidemo,crdemo,dhdemo,lddemo,kademo,amdemo,azdemo, dmdemo, bedemo, vzdemo, bgdemo, hydemo, bpdemo, vjdemo, mddemo, dldemo)
+demo <- select(alldemo, "studyid" = demographics_part_id, "demo_visit_code" = visit_code, "demo_date" = record_date, "demographics_q1", "demographics_q2", "demographics_q3", "demographics_q4", "demographics_q5", "demographics_q6", "demographics_q7", "demographics_q8", "demographics_q9", "demographics_q10")
+
+# Creates an interactive data table 
+library(DT)
+datatable(demo, rownames = FALSE, filter="top", options = list(pageLength = 5, scrollX=T) )
+```
+
+# Import QUALITY OF LIFE
+```{r}
+amqol <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/am_iccplus/baseline_qualityoflife.csv")
+azqol <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/az_iccplus/baseline_qualityoflife.csv")
+biqol <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/bi_iccplus/baseline_qualityoflife.csv")
+crqol <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/cr_iccplus/baseline_qualityoflife.csv") 
+dhqol <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/dh_iccplus/baseline_qualityoflife.csv")
+ldqol <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/ld_iccplus/baseline_qualityoflife.csv")
+kaqol <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/ka_iccplus/baseline_qualityoflife.csv")
+dmqol <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/dm_iccplus/baseline_qualityoflife.csv")
+beqol <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/be_iccplus/baseline_qualityoflife.csv")
+vzqol <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/vz_iccplus/baseline_qualityoflife.csv")
+bgqol <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/bg_iccplus/baseline_qualityoflife.csv")
+hyqol <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/hy_iccplus/baseline_qualityoflife.csv") 
+bpqol <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/bp_iccplus/baseline_qualityoflife.csv")
+vjqol <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/vj_iccplus/baseline_qualityoflife.csv")
+mdqol <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/md_iccplus/baseline_qualityoflife.csv")
+dlqol <- read.csv("/Users/jonkawatachi/ICC-Scraper-master/dist/ICC_data/dl_iccplus/baseline_qualityoflife.csv")
+allqol<- rbind(biqol,crqol,dhqol,ldqol,kaqol,amqol,azqol, dmqol, beqol, vzqol, bgqol, hyqol, bpqol, vjqol, mdqol, dlqol)
+qol <- select(allqol, "studyid" = quality_of_life_part_id, "qol_visit_code" = visit_code, "qol_date" = record_date, "quality_of_life_q1", "quality_of_life_q2", "quality_of_life_q3", "quality_of_life_q4", "quality_of_life_q5", "quality_of_life_q6") 
+```
+
+```{r}
+sessionInfo()
+```
+
